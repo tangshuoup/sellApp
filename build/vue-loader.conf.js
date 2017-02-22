@@ -8,7 +8,8 @@ module.exports = {
       ? config.build.productionSourceMap
       : config.dev.cssSourceMap,
     extract: isProduction,
-    js:"babel-loader"
+    js:"babel-loader",
+  
   }),
   postcss: [
     require('autoprefixer')({
