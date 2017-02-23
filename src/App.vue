@@ -12,7 +12,7 @@
     <div class="tab-item">商家</div>
     </router-link>
   </div>
-    <router-view></router-view>
+    <router-view :seller="seller"></router-view>
   </div>
 </template>
 
