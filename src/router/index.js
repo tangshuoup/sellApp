@@ -23,6 +23,5 @@ export default new Router({
       component: Ratings
     }
   ],
-    mode: 'history',
     'linkActiveClass': 'active'
 });

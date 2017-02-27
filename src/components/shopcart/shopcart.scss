@@ -1,0 +1,196 @@
+.shopcart{
+		position: fixed;
+		left: 0;
+		bottom: 0;
+		z-index: 50;
+		width: 100%;
+		height: 0.96rem;
+		background: #141d27;
+		.content{
+			display: flex;
+			background: #141d27;
+			color:rgba(255,255,255,0.4);
+			.content-left{
+				flex:1;
+				.logo-wrapper{
+					display: inline-block;
+					position: relative;
+					top:-0.1rem;
+					margin: 0 0.24rem;
+					padding: 0.12rem;
+					width: 1.12rem;
+					height: 1.12rem;
+					box-sizing: border-box;
+					vertical-align: top;
+					border-radius: 50%;
+					background: #141d27;
+					.logo{
+						width: 100%;
+						height: 100%;
+						border-radius: 50%;
+						text-align: center;
+						background: #2b343c;
+						&.highlight{
+							background:  rgb(0,160,220);
+						}
+						.icon-shopping_cart{
+							font-size: 0.48rem;
+							color: #80858a;
+							line-height: 0.88rem;
+							&.highlight{
+								color:#fff;
+							}
+						}
+					}
+					.num{
+						position: absolute;
+						top: 0;
+						right: 0;
+						width: 0.48rem;
+						height: 0.32rem;
+						line-height: 0.32rem;
+						text-align: center;
+						border-radius: 0.32rem;
+						font-size:  0.18rem;
+						font-weight: 700;
+						color:#fff;
+						background: rgb(240,20,20);
+						box-shadow: 0 0.04rem 0.08rem 0 rgba(0,0,0,0.4);
+					}
+				}
+				.price{
+						display: inline-block;
+						vertical-align: top;
+						margin-top: 0.24rem;
+						padding-right: 0.24rem;
+						line-height: 0.48rem;
+						box-sizing: border-box;
+						border-right: 1px solid rgba(255,255,255,0.1);						
+						font-size: 0.32rem;
+						font-weight: 700;
+						&.highlight{
+							color: #fff;
+						}
+				}
+					.desc{
+						display: inline-block;
+						vertical-align: top;
+						line-height: 0.48rem;
+						margin: 0.24rem 0 0 0.24rem;						
+						font-size: 0.24rem;
+				}
+			}
+			.content-right{
+				flex:0 0 2.1rem;
+				width: 2.1rem;
+				.pay{
+					height: 0.96rem;
+					line-height: 0.96rem;
+					text-align: center;
+					font-size: 0.24rem;
+					font-weight: 700;
+					background: #2b333b;
+					&.not-enough{
+						background: #2b333b;
+					}
+					&.enough{
+						background: #00b43c;
+						color: #fff;
+					}
+				}
+			}
+			
+		}
+		.ball-container{
+			.ball{
+				position: fixed;
+				left:0.64rem;
+				bottom: 0.44rem;
+				z-index: 200;
+				transition: all 0.4s cubic-bezier(0.49, -0.29, 0.75, 0.41);
+				.inner{
+						width: 0.32rem;
+						height: 0.32rem;
+						border-radius: 50%;
+						background: rgb(0,160,220);
+						transition: all 0.4s linear;
+					}
+				
+			}
+		}
+		.shopcart-list{
+			position:  absolute;
+			top: 0;
+			left:0;
+			z-index: -1;
+			width: 100%;
+			transition: all 0.3s;
+			transform: translate3d(0,-100%,0);
+			&.fold-enter-active,&.fold-leave-active{
+				transform:translate3d(0,0,0);
+			}
+			.list-header{
+				height: 0.8rem;
+				line-height: 0.8rem;
+				padding: 0 0.18rem;
+				background:#f3f5f7;
+				border-bottom: 1px solid rgba(7,17,27,0.1);
+				.title{
+					float: left;
+				}
+				.empty{
+					float:right;
+					font-size: 0.24rem;
+					color: rgb(0,160,220);
+				}
+			}
+			.list-content{
+				overflow: hidden;
+				padding: 0 0.36rem;
+				max-height: 4.34rem;
+				background: #fff;
+				.food{
+					position: relative;
+					padding: 0.24rem 0;
+					border-sizing:border-box;
+					@include border-1px(rgba(7,17,27,0.1));
+				}
+				.name{
+					line-height: 0.48rem;
+					font-size: 0.28rem;
+					color: rgb(7,17,27);
+				}
+				.price{
+					position: absolute;
+					right: 1.8rem;
+					bottom:0.24rem;
+					line-height: 0.48rem;
+					font-size:0.28rem;
+					font-weight: 700;
+					color: rgb(240,20,20);
+				}
+				.cartcontrol-wrapper{
+					position: absolute;
+					right: 0;
+					bottom: 0.12rem;
+				}
+			}
+
+		}
+	}
+	.list-mask{
+		position: fixed;
+		top: 0;
+		left:0;
+		width: 100%;
+		height: 100%;
+		z-index: 40;
+		opacity: 1;
+		background: rgba(7,17,27,0.6);
+		filter:blur(10px);
+		transition: all 0.3s;
+		&.fade-enter-active,&.fade-leave-active{
+			opacity: 0;
+			background: rgba(7,17,27,0);
+		}
+	}
