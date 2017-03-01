@@ -1,6 +1,6 @@
 <template>
   <transition name="move">	
-	<div v-show="showFlag" class="food" ref="food">
+	<div v-show="showFlag" class="food" ref="food" >
 		<div class="food-content">
 			<div class="image-header">
 				<img :src="food.image">
@@ -18,20 +18,50 @@
 					<span class="now">￥{{food.price}}</span>
 					<span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
 				</div>
+				<div class="cartcontrol-wrapper">
+					<cartcontrol :food="food" @add="addFood"></cartcontrol>
+				</div>
+				<div class="buy" v-show="!food.count || food.count===0" @click.stop.prevent="addFirst">加入购物车</div>
+		 	</div>
+			<split></split>
+			<div class="info">
+				<h1 class="title">商品信息</h1>
+				<p class="text">{{food.info}}</p>
 			</div>
-			<div class="cartcontrol-wrapper">
-				<cartcontrol :food="food" @add="addFood"></cartcontrol>
+			<split></split>
+			<div class="rating">
+				<h1 class="title">商品评价</h1>
+				<ratingselect :selectType="selectType" :onlyContent="onlyContent" :desc="desc" @select="ratingtypeSelect" @toggle="toggleContent" :ratings="food.ratings"></ratingselect>
+				<div class="rating-wrapper">
+					<ul v-show="food.ratings && food.ratings.length">
+						<li v-show="needShow(rating.rateType,rating.text)" v-for="rating in food.ratings" class="rating-item border-1px">
+							<div class="user">
+								<span class="name">{{rating.username}}</span>
+								<img :src="rating.avatar" width="12" height="12">
+							</div>
+							 <div class="time">{{rating.rateTime | formatDate}}</div>
+					 			<p class="text">
+					 			<span class="iconfont" :class="{'icon-thumb_up' :rating.rateType===0,'icon-thumb_down' :rating.rateType===1}"></span>{{rating.text}}
+					 			</p>
+						</li>
+					</ul>					
+					
+					  <div class="no-rating" v-show="!food.ratings || !food.ratings.length">暂无评价</div>
+				</div>
 			</div>
-			<div class="buy" v-show="!food.count || food.count===0" @click="addFirst">加入购物车</div>
-		</div>
+	  </div>
 	</div>
   </transition>
 </template>
 <script>
 import Vue from 'vue';
 import BScroll from 'better-scroll';
+import {formatDate} from 'common/js/data';
 import cartcontrol from 'components/cartcontrol/cartcontrol';
+import ratingselect from 'components/ratingselect/ratingselect';
+import split from 'components/split/split';
 
+const ALL = 2;
 	export default {
 		props: {
 			food: {
@@ -40,17 +70,26 @@ import cartcontrol from 'components/cartcontrol/cartcontrol';
 		},
 		data() {
 			return {
-				showFlag: false
+				showFlag: false,
+				selectType: ALL,
+				onlyContent: true,
+				desc: {
+					all: '全部',
+					postive: '推荐',
+					negative: '吐槽'
+				}
 			};
 		},
 		methods: {
 			show() {
-				this.showFlag = true;
+				this.showFlag = true;				
 				this.$nextTick(() => {
 					if (!this.scroll) {
 						this.scroll = new BScroll(this.$refs.food, {
 							click: true
 						})
+					} else {
+						this.scroll.refresh();
 					}
 				})
 			},
@@ -67,14 +106,45 @@ import cartcontrol from 'components/cartcontrol/cartcontrol';
 		  },
 		  addFood(target) {
         	this.$emit('add', target);
+     	  },
+     	  ratingtypeSelect(type) {
+     	  		this.selectType = type;
+     	  		this.$nextTick(() => {
+     	  			this.scroll.refresh();
+     	  		})
+     	  },
+     	  toggleContent() {
+     	  		this.onlyContent = !this.onlyContent;
+     	  		this.$nextTick(() => {
+     	  			this.scroll.refresh();
+     	  		})
+     	  },
+     	  needShow(type, text) {
+     	  	if (this.onlyContent && !text) {
+     	  		return false;
+     	  	}
+     	  	if (this.selectType === ALL) {
+     	  		return true;
+     	  	} else {
+     	  		return type === this.selectType;
+     	  	}
      	  }
 		},
+		filters: {
+			formatDate(time) {
+				let date =new Date(time);
+				return formatDate(date, 'yyyy-MM-dd hh:mm');
+			}
+		},
 		components: {
-			cartcontrol
+			cartcontrol,
+			ratingselect,
+			split
 		}
 	};
 </script>
 <style lang="scss" rel="stylesheet/scss">
+@import '../../common/sass/mixin.scss';
 	.food {
 		position: fixed;
 		left: 0;
@@ -114,6 +184,7 @@ import cartcontrol from 'components/cartcontrol/cartcontrol';
 			}
 		}
 		.content{
+			position: relative;
 			padding:0.36rem;
 			.title{
 				line-height: 0.28rem;
@@ -148,13 +219,12 @@ import cartcontrol from 'components/cartcontrol/cartcontrol';
 					color:rgb(147,153,159);
 				}
 			}
-		}
-		.cartcontrol-wrapper{
+			.cartcontrol-wrapper{
 			position: absolute;
 			right: 0.24rem;
 			bottom:0.24rem;
-		}
-		.buy{
+			}
+			.buy{
 			position: absolute;
 			right: 0.36rem;
 			bottom: 0.36rem;
@@ -167,6 +237,84 @@ import cartcontrol from 'components/cartcontrol/cartcontrol';
 			padding: 0 0.24rem;
 			font-size: 0.2rem;
 			background: rgb(0,160,220);
+			}
 		}
+		.info{
+			padding: 0.36rem;
+			.title{
+				line-height: 0.28rem;
+				margin-bottom: 0.12rem;
+				font-size: 0.28rem;
+				color: rgb(7,17,27);
+			}
+			.text{
+				line-height: 0.48rem;
+				padding:0 0.16rem;
+				font-size: 0.28rem;
+				color:rgb(77,85,93);
+			}
+		}
+		.rating{
+			padding-top: 0.36rem;
+			.title{
+				line-height: 0.28rem;
+				margin-left: 0.36rem;
+				font-size: 0.28rem;
+				color: rgb(7,17,27);
+			}
+			.rating-wrapper{
+				padding: 0 0.36rem;
+				.rating-item{
+					position:relative;
+					padding: 0.32rem 0;
+					@include border-1px(rgba(7,17,27,0.1));
+					.user{
+					position: absolute;
+					right: 0;
+					top: 0.32rem;
+					line-height: 0.24rem;
+					font-size: 0;
+						.name{
+						display: inline-block;
+						vertical-align: top;
+						margin-right: 0.24rem;
+						font-size: 0.2rem;
+						color: rgb(147,153,159);
+						}
+						.avatar{
+						border-radius: 50%;
+						}
+					}
+					.time{
+						margin-bottom: 0.12rem;
+						line-height: 0.24rem;
+						font-size: 0.2rem;
+						color: rgb(147,153,159);
+					}
+					.text{
+						line-height: 0.32rem;
+						font-size: 0.24rem;
+						color: rgb(7,17,27);
+						.icon-thumb_up,.icon-thumb_down{
+							margin-right: 0.08rem;
+							line-height: 0.32rem;
+							font-size: 0.24rem;
+						}
+						.icon-thumb_up{
+						color: rgb(0,160,220);
+						}
+						.icon-thumb_down{
+						color: rgb(147,153,159);
+						}
+					}
+				}
+				.no-rating{
+					padding: 0.32rem 0;
+					font-size: 0.24rem;
+					color: rgb(147,153,159);
+				}
+				
+			}
+		}	
 	}
 </style>
