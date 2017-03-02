@@ -45,13 +45,7 @@
 						<div class="text">优惠信息</div>
 						<div class="line"></div>
 					</div>
-					<ul v-if="seller.supports" class="supports">
-						<li class="support-item" v-for="(item,i) in seller.supports">
-						<span class="icon" :class="classTab[seller.supports[i].type]">
-						</span>
-						<span class="text">{{seller.supports[i].description}}</span>
-						</li>
-					</ul>
+					<support :seller="seller"></support>
 					<div class="title">
 						<div class="line"></div>
 						<div class="text">商家公告</div>
@@ -71,6 +65,7 @@
 
 <script>
 import star from 'components/star/star';
+import support from 'components/support/support';
 	export default {
 	   name: 'header',
 	   props: {
@@ -84,6 +79,9 @@ import star from 'components/star/star';
 
 	  	}
 	  },
+	  created() {
+	    	this.classTab = ['decrease', 'discount', 'special', 'invoice', 'guarantee']; 
+     },
 	  methods: {
 	  	showMask() {
 	  		this.maskShow = true;
@@ -92,11 +90,9 @@ import star from 'components/star/star';
 	  		this.maskShow = false;
 	  	}
 	  },
-	  created() {
-	    	this.classTab = ['decrease', 'discount', 'special', 'invoice', 'guarantee']; 
-       },
        components: {
-       	 star
+       	 star,
+       	 support
        }	
 };
 </script>
