@@ -2,7 +2,8 @@
 
 > sell app
 
-## 编译过程
+## 技术栈
+vue2 ,vue-cli, vue-router2, vue-resource, better-scroll ,webpack, scss,es6 ,eslint
 
 ``` bash
 # 下载到本地cd进入目录，装载依赖
@@ -20,6 +21,7 @@ npm run build --report
 
 # 启动 nodeJs server
 node prod.server.js
+
 ```
 
 For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
